@@ -1,11 +1,17 @@
 package ca.asymons.connect4
 
+import android.util.Log
+
 /**
  * Created by Root on 2017-12-26.
  */
 class CFourBoardState(private val length: Int, private val width: Int) : BoardState {
 
     private val state = Array(length * width){'0'}
+
+    override fun resetBoard() {
+        state.fill('0')
+    }
 
     override fun pushPiece(p : Char, col : Int) : Int{
         if(col >= width) return length * width
@@ -24,13 +30,11 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
 
     // 21 checks total per move
     override fun checkWin(row : Int, column : Int) : Boolean{
-        val i = row - 3
-        val j = column - 3
         val p = state[row * width + column]
         var win = false
-        win = win || checkRow(i,j,p)
-        win = win || checkRow(i,j,p,enableRow = false)
-        win = win || checkRow(i,j,p, enableColumn = false)
+        win = win || checkRowHorizontal(row,column,p)
+        win = win || checkRowVertical(row,column,p)
+        win = win || checkRowDiagonal(row,column,p)
         return win
     }
 
@@ -38,19 +42,74 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
     override fun getBoard(): Array<Char> {
         return state
     }
+    
 
-//    private fun findMatchAroundPiece(row : Int, column : Int): Pair<Int, Int>{
-//        val i = if(row == 0) row else row-1
-//        val j = if(column == 0) column else column-1
-//        for(a in 0..2){
-//            if(row + a >= width) continue
-//            for(b in 0 .. 2){
-//                if(column + b >= length) continue
-//                if(state[i][j] == state[i+a][j+b]) return Pair(i+a,j+b)
-//            }
-//        }
-//        return Pair(length,width)
-//    }
+    private fun checkRowDiagonal(row : Int, column : Int, p : Char) : Boolean{
+        val i = row - 3
+        val j = column - 3
+
+        var connected = 0
+        for(a in 0 .. 6){
+            if(i + a >= length || j + a >= width) break
+            if(i + a < 0 || j + a < 0) continue
+            if(state[(i + a) * width + j + a] == p)
+                connected++
+            else connected = 0
+            if(connected == 4) return true
+        }
+
+        val k = row - 3
+        val l = column + 3
+
+        for(a in 0 .. 6){
+            if(k + a >= length || l - a < 0) break
+            if(k + a < 0 || l - a >= width) continue
+            if(state[(k + a) * width + l - a] == p)
+                connected++
+            else connected = 0
+            if(connected == 4) return true
+            Log.d("BoardState", "Connected State: " + connected + " at pos: " + ((row + a) * width + column))
+        }
+
+        return false
+
+    }
+
+    private fun checkRowHorizontal(row : Int, column : Int, p : Char) : Boolean{
+        val col = column - 3
+        if(row >= length || row < 0) {
+            return false
+        }
+        var connected = 0
+        for(a in 0 .. 6){
+            if(col + a >= width) break
+            if(col + a < 0) continue
+            if(state[row * width + col + a] == p)
+                connected++
+            else connected = 0
+            if(connected == 4) return true
+        }
+        return false
+    }
+
+
+    private fun checkRowVertical(row : Int, column : Int, p : Char) : Boolean{
+        if(column >= width || column < 0) {
+            return false
+        }
+        var connected = 0
+        for(a in 0 .. 3){
+            if(row + a >= length) break
+            if(row + a < 0) continue
+            if(state[(row + a) * width + column] == p)
+                connected++
+            else connected = 0
+            if(connected == 4) return true
+        }
+        return false
+    }
+
+
 
     private fun checkRow(row : Int, column : Int, p : Char,
                          enableRow : Boolean = true, enableColumn : Boolean = true) : Boolean{
@@ -58,7 +117,7 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
         var connected = 0
         for(a in 0 .. 6){
             if(row + a >= width || column + a >= length) break
-            if(row + a < 0 || column + 0 < 0) continue
+            if(row + a < 0 || column + a < 0) continue
             if(state[(if(enableRow) row+a else row) * width + (if (enableColumn) column+a else column)] == p)
                 connected++
             else connected = 0

@@ -7,4 +7,5 @@ interface BoardState {
     fun pushPiece(p : Char, col : Int): Int
     fun checkWin(row : Int, column : Int) : Boolean
     fun getBoard() : Array<Char>
+    fun resetBoard()
 }

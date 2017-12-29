@@ -74,6 +74,10 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
                 Log.d("Board", "Clicked: " + a)
                 notifyItemChanged(a)
                 if(a < length * width) turnManager.nextTurn()
+                if(data.checkWin(a/width, a % width)){
+                    data.resetBoard()
+                    notifyDataSetChanged()
+                }
                 Log.d("Board", "Check Win: " + data.checkWin(position/width, position % width))
                 notifyObservers()
             }
