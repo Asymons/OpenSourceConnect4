@@ -7,11 +7,8 @@ class CFourTurnManager : TurnManager {
 
     private val pieceA = '1'
     private val pieceB = '2'
-    private var actionPiece : Char
-
-    init {
-        actionPiece = if(Math.random() > 0.5) pieceA else pieceB
-    }
+    private var actionPiece = if(Math.random() > 0.5) pieceA else pieceB
+    private var gameStatus = true
 
     override fun nextTurn() {
         actionPiece = if(actionPiece == pieceA) pieceB else pieceA
@@ -19,5 +16,20 @@ class CFourTurnManager : TurnManager {
 
     override fun getTurn() : Char {
         return actionPiece
+    }
+
+    override fun resetGame(){
+        if(!gameStatus){
+            actionPiece = if(Math.random() > 0.5) pieceA else pieceB
+            gameStatus = true
+        }
+    }
+
+    override fun setGameStatus(status : Boolean) {
+        gameStatus = status
+    }
+
+    override fun getGameStatus(): Boolean {
+        return gameStatus
     }
 }

@@ -76,6 +76,7 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
                 if(a < length * width) turnManager.nextTurn()
                 if(data.checkWin(a/width, a % width)){
                     data.resetBoard()
+                    turnManager.setGameStatus(false)
                     notifyDataSetChanged()
                 }
                 Log.d("Board", "Check Win: " + data.checkWin(position/width, position % width))

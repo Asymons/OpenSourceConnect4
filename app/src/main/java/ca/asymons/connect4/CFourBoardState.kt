@@ -42,7 +42,7 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
     override fun getBoard(): Array<Char> {
         return state
     }
-    
+
 
     private fun checkRowDiagonal(row : Int, column : Int, p : Char) : Boolean{
         val i = row - 3

@@ -6,4 +6,7 @@ package ca.asymons.connect4
 interface TurnManager {
     fun nextTurn()
     fun getTurn() : Char
+    fun resetGame()
+    fun setGameStatus(status : Boolean)
+    fun getGameStatus() : Boolean
 }
