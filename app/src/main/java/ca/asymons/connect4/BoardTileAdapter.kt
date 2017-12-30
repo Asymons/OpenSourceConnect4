@@ -55,9 +55,9 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
     private fun refreshImages(piece : View, position : Int){
         Log.d("Board", "Setting Image at: " + position)
         when {
-            data.getBoard()[position] == '0' -> piece.setBackgroundResource(R.drawable.abc_ic_star_black_16dp)
-            data.getBoard()[position] == '1' -> piece.setBackgroundResource(R.drawable.abc_ic_star_half_black_16dp)
-            data.getBoard()[position] == '2' -> piece.setBackgroundResource(R.drawable.abc_ic_arrow_drop_right_black_24dp)
+            data.getBoard()[position] == '0' -> piece.setBackgroundResource(R.drawable.ic_piece_black)
+            data.getBoard()[position] == '1' -> piece.setBackgroundResource(R.drawable.ic_piece_blue)
+            data.getBoard()[position] == '2' -> piece.setBackgroundResource(R.drawable.ic_piece_red)
         }
     }
 

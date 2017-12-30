@@ -9,7 +9,93 @@
     tools:context="ca.asymons.connect4.Board">
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_alignParentStart="true"
+            android:id="@+id/btn_exit_game"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:contentDescription="Exit Game"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/v_ply_one_container"
+            android:layout_toEndOf="@id/btn_exit_game">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:id="@+id/v_ply_one_piece"
+                android:contentDescription="Player 1 Piece"
+                android:src="@drawable/ic_piece_blue"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/v_ply_one_name"
+                android:padding="8dp"
+                android:text="Player 1"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/v_ply_two_container"
+            android:layout_toStartOf="@id/btn_pause_game">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/v_ply_two_piece"
+                android:padding="8dp"
+                android:contentDescription="Player 2 piece"
+                android:src="@drawable/ic_piece_red"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/v_ply_two_name"
+                android:padding="8dp"
+
+                android:text="Player 2"/>
+
+        </LinearLayout>
+
+
+
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_toStartOf="@id/btn_undo_move"
+            android:id="@+id/btn_pause_game"
+            android:contentDescription="Pause game"
+            android:src="@drawable/ic_pause_black_24dp"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/btn_undo_move"
+            android:contentDescription="Undo move"
+            android:src="@drawable/ic_undo_black_24dp"/>
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/board"
@@ -18,9 +104,5 @@
         android:gravity="center"
         />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/v_current_turn"/>
 
 </LinearLayout>
