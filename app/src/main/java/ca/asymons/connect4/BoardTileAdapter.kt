@@ -59,11 +59,19 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
             data.getBoard()[position] == '1' -> piece.setBackgroundResource(R.drawable.ic_piece_blue)
             data.getBoard()[position] == '2' -> piece.setBackgroundResource(R.drawable.ic_piece_red)
         }
+        piece.minimumHeight = piece.width
+        Log.d("Board", "Width: " + piece.width + " Height: " + piece.height + " Min Height: " + piece.minimumHeight + " Min Width: " + piece.minimumWidth)
     }
 
     inner class ViewHolder(v : View) : RecyclerView.ViewHolder(v) {
 
         private val piece : ImageView = v.find(R.id.piece)
+
+        init{
+            v.minimumHeight = v.width
+            piece.minimumHeight = piece.width
+        }
+
 
         fun bind(position: Int){
             refreshImages(piece, position)
@@ -87,6 +95,7 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
                 Log.d("Board", "Check Win: " + data.checkWin(position/width, position % width))
                 notifyObservers()
             }
+
         }
 
     }

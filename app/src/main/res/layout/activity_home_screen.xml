@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,31 +15,45 @@
         android:layout_height="wrap_content"
         style="@style/HomeScreenButton"
         android:id="@+id/v_title"
+        android:layout_above="@id/v_flow_grid"
+        android:layout_alignParentTop="true"
+        android:textColor="@android:color/white"
+        android:textSize="24dp"
         android:gravity="center"
         android:text="@string/app_name"/>
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:columnCount="2"
         android:rowCount="2"
-        android:minHeight="160dp"
+        android:minHeight="260dp"
+        android:id="@+id/v_flow_grid"
         android:alignmentMode="alignBounds">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginRight="2dp"
+            android:layout_marginBottom="2dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
             android:gravity="center"
+            android:id="@+id/btn_one_player_mode"
             android:background="@color/colorHomePageButton">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_person_black_24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_one_player_mode"
                 android:layout_gravity="center"
+                android:textColor="@android:color/white"
                 android:text="Single Player"/>
 
         </LinearLayout>
@@ -55,10 +69,16 @@
             android:id="@+id/btn_two_player_mode"
             android:background="@color/colorHomePageButton">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_people_black_24dp"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textColor="@android:color/white"
                 android:text="Two Player"/>
 
         </LinearLayout>
@@ -70,13 +90,19 @@
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
             android:gravity="center"
+            android:id="@+id/btn_multiplayer"
             android:background="@color/colorHomePageButton">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_wifi_black_24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_multiplayer"
                 android:layout_gravity="center"
+                android:textColor="@android:color/white"
                 android:text="Multiplayer"/>
 
         </LinearLayout>
@@ -88,13 +114,19 @@
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
             android:gravity="center"
+            android:id="@+id/btn_settings"
             android:background="@color/colorHomePageButton">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_settings_black_24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_settings"
                 android:layout_gravity="center"
+                android:textColor="@android:color/white"
                 android:text="Settings"/>
 
         </LinearLayout>
@@ -103,4 +135,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

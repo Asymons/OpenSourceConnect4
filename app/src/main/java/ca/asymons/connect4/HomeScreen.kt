@@ -13,6 +13,7 @@ class HomeScreen : AppCompatActivity() {
         btn_two_player_mode.setOnClickListener {
             startActivity(Intent(applicationContext, Board::class.java))
         }
+        supportActionBar!!.hide()
 
 
     }

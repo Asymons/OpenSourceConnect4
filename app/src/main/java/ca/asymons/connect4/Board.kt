@@ -45,9 +45,10 @@ class Board : AppCompatActivity(), BoardStateObserver {
         setContentView(R.layout.activity_board)
         supportActionBar!!.hide()
 
-        board.adapter = BoardTileAdapter(7,6)
-        board.layoutManager = GridLayoutManager(applicationContext, 6)
+        board.adapter = BoardTileAdapter(6,7)
+        board.layoutManager = GridLayoutManager(applicationContext, 7)
         board.setHasFixedSize(true)
+        board.addItemDecoration(BoardAdapterDecorator(0))
 
         (board.adapter as BoardTileAdapter).addObserver(this)
         updateTurn()

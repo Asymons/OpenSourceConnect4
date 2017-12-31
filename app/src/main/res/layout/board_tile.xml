@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="60dp"
-    android:layout_height="60dp">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:background="@android:color/holo_blue_dark"
+    android:layout_height="wrap_content">
 
-    <ImageView
+    <ca.asymons.connect4.ResizeableImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_piece_transparent"
+        android:background="@drawable/ic_piece_black"
         android:id="@+id/piece" />
+
+    <!--android:scaleType="fitCenter"-->
+    <!--android:adjustViewBounds="false"-->
 
 </RelativeLayout>
