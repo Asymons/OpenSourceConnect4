@@ -6,6 +6,7 @@ package ca.asymons.connect4
 interface BoardState {
     fun pushPiece(p : Char, col : Int): Int
     fun checkWin(row : Int, column : Int) : Boolean
+    fun checkTie() : Boolean
     fun getBoard() : Array<Char>
     fun resetBoard()
 }

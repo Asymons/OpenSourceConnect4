@@ -70,11 +70,16 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
             piece.setOnClickListener {
                 val beforePieceChange = data.getBoard()[position]
                 Log.d("Board", "Clicked: " + position)
+                Log.d("Board", "Column: " + (position % width))
                 val a = data.pushPiece(turnManager.getTurn(), position % width)
                 Log.d("Board", "Clicked: " + a)
                 notifyItemChanged(a)
                 if(a < length * width) turnManager.nextTurn()
-                if(data.checkWin(a/width, a % width)){
+                if(a < length * width && data.checkWin(a/width, a % width)){
+                    data.resetBoard()
+                    turnManager.setGameStatus(false)
+                    notifyDataSetChanged()
+                }else if(a < length * width && data.checkTie()){
                     data.resetBoard()
                     turnManager.setGameStatus(false)
                     notifyDataSetChanged()

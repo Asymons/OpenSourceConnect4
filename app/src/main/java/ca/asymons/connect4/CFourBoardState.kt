@@ -13,6 +13,13 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
         state.fill('0')
     }
 
+    override fun checkTie() : Boolean{
+        for(a in 0 until width){
+            if(state[a] == '0') return false
+        }
+        return true
+    }
+
     override fun pushPiece(p : Char, col : Int) : Int{
         if(col >= width) return length * width
         if(state[col] != '0') return length * width
@@ -31,10 +38,15 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
     // 21 checks total per move
     override fun checkWin(row : Int, column : Int) : Boolean{
         val p = state[row * width + column]
+        Log.d("BoardState", "Character being checked: " + p + " at position " + (row * width + column))
         var win = false
         win = win || checkRowHorizontal(row,column,p)
+        Log.d("BoardState", "Horizontal win: " + checkRowHorizontal(row,column,p))
         win = win || checkRowVertical(row,column,p)
+        Log.d("BoardState", "Vertical win: " + checkRowVertical(row,column,p))
         win = win || checkRowDiagonal(row,column,p)
+        Log.d("BoardState", "Diagonal win: " + checkRowDiagonal(row,column,p))
+
         return win
     }
 
@@ -57,6 +69,7 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
             else connected = 0
             if(connected == 4) return true
         }
+        connected = 0
 
         val k = row - 3
         val l = column + 3
@@ -68,7 +81,7 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
                 connected++
             else connected = 0
             if(connected == 4) return true
-            Log.d("BoardState", "Connected State: " + connected + " at pos: " + ((row + a) * width + column))
+            Log.d("BoardState", "Connected State: " + connected + " at pos: " + ((k + a) * width + l - a) + " with char: " + p)
         }
 
         return false

@@ -22,15 +22,19 @@ class Board : AppCompatActivity(), BoardStateObserver {
             val build = AlertDialog.Builder(this)
             build.setMessage((board.adapter as BoardTileAdapter).turnManager.getTurn() + " lost. Play again?")
             build.setPositiveButton("Ok", { _, _ ->
-                //TODO FIX THIS LATER, MAKE OK RESET
+                (board.adapter as BoardTileAdapter).turnManager.resetGame()
+                updateTurn()
             })
             build.setNegativeButton("Cancel", { _,_ ->
-                //TODO FIX THIS LATER, MAKE CANCEL GO TO HOME SCREEN
+                finish()
             })
+
+            build.setOnCancelListener {
+                finish()
+            }
+
             build.create().show()
-            //TODO IF USER CLICKS OUTSIDE OF DIALOG, JUST RESET THE GAME FOR THEM
-            (board.adapter as BoardTileAdapter).turnManager.resetGame()
-            updateTurn()
+
         }
 
         updateTurn()
@@ -39,6 +43,7 @@ class Board : AppCompatActivity(), BoardStateObserver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board)
+        supportActionBar!!.hide()
 
         board.adapter = BoardTileAdapter(7,6)
         board.layoutManager = GridLayoutManager(applicationContext, 6)
@@ -46,6 +51,20 @@ class Board : AppCompatActivity(), BoardStateObserver {
 
         (board.adapter as BoardTileAdapter).addObserver(this)
         updateTurn()
+
+        btn_exit_game.setOnClickListener {
+            finish()
+        }
+
+        btn_pause_game.setOnClickListener {
+                val build = AlertDialog.Builder(this)
+                build.setMessage("Game Paused <Currently does nothing>")
+                build.setPositiveButton("Ok", { _, _ ->
+                })
+                build.setNegativeButton("Cancel", { _,_ ->
+                })
+                build.create().show()
+        }
 
     }
 
