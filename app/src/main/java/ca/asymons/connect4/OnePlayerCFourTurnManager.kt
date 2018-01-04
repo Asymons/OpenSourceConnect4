@@ -1,9 +1,9 @@
 package ca.asymons.connect4
 
 /**
- * Created by Root on 2017-12-28.
+ * Created by Root on 2018-01-03.
  */
-class CFourTurnManager : TurnManager {
+class OnePlayerCFourTurnManager : TurnManager {
 
     private val pieceA = '1'
     private val pieceB = '2'
@@ -12,10 +12,6 @@ class CFourTurnManager : TurnManager {
 
     override fun nextTurn() {
         actionPiece = if(actionPiece == pieceA) pieceB else pieceA
-    }
-
-    override fun getTurn() : Char {
-        return actionPiece
     }
 
     override fun resetGame(){
@@ -29,7 +25,9 @@ class CFourTurnManager : TurnManager {
         gameStatus = status
     }
 
-    override fun getGameStatus(): Boolean {
-        return gameStatus
-    }
+    override fun getTurn() : Char = actionPiece
+
+    override fun getGameStatus(): Boolean = gameStatus
+
+    override fun isAi(): Boolean = actionPiece == pieceB
 }

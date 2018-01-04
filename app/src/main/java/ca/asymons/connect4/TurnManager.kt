@@ -9,4 +9,5 @@ interface TurnManager {
     fun resetGame()
     fun setGameStatus(status : Boolean)
     fun getGameStatus() : Boolean
+    fun isAi() : Boolean
 }

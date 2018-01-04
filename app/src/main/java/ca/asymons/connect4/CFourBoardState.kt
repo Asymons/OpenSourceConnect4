@@ -9,6 +9,9 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
 
     private val state = Array(length * width){'0'}
 
+    override fun updatePiece(pos: Int, p: Char) {
+        state[pos] = p
+    }
     override fun resetBoard() {
         state.fill('0')
     }

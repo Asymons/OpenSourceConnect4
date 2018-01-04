@@ -10,13 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Board"
-                  android:parentActivityName=".HomeScreen">
+                  android:parentActivityName=".HomeScreen"
+                  android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeScreen"/>
         </activity>
         <!-- <activity android:name=".Board"></activity> -->
-        <activity android:name=".HomeScreen">
+        <activity
+            android:name=".HomeScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

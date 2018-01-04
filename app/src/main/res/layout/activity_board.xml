@@ -23,6 +23,7 @@
             android:layout_alignParentStart="true"
             android:id="@+id/btn_exit_game"
             android:src="@drawable/ic_arrow_back_black_24dp"
+            android:background="@null"
             android:contentDescription="Exit Game"/>
 
 
@@ -46,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/v_ply_one_name"
                 android:padding="8dp"
+                android:textColor="#F5F5F5"
                 android:text="Player 1"/>
 
         </LinearLayout>
@@ -71,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/v_ply_two_name"
                 android:padding="8dp"
-
+                android:textColor="#F5F5F5"
                 android:text="Player 2"/>
 
         </LinearLayout>
@@ -82,6 +84,7 @@
             android:padding="8dp"
             android:layout_toStartOf="@id/btn_undo_move"
             android:id="@+id/btn_pause_game"
+            android:background="@null"
             android:contentDescription="Pause game"
             android:src="@drawable/ic_pause_black_24dp"/>
 
@@ -91,6 +94,7 @@
             android:padding="8dp"
             android:layout_alignParentEnd="true"
             android:id="@+id/btn_undo_move"
+            android:background="@null"
             android:contentDescription="Undo move"
             android:src="@drawable/ic_undo_black_24dp"/>
 

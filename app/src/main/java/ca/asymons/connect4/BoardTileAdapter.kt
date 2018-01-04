@@ -7,19 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import org.jetbrains.anko.find
-import org.jetbrains.anko.image
+import java.util.*
 
 /**
  * Created by Root on 2017-12-28.
  */
-class BoardTileAdapter(private val length : Int, private val width : Int) : RecyclerView.Adapter<BoardTileAdapter.ViewHolder>() {
+class BoardTileAdapter(private val length : Int, private val width : Int, private val turnManager: TurnManager) : RecyclerView.Adapter<BoardTileAdapter.ViewHolder>() {
 
-    private val data = CFourBoardState(length,width)
+    private val data = CFourBoardBuffer(length,width)
     private val observers = ArrayList<BoardStateObserver>()
-    var turnManager = CFourTurnManager()
+    private var onBind : Boolean = false
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+        onBind = true
         holder?.bind(position)
+        onBind = false
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -31,13 +33,37 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
         return length * width
     }
 
-    fun updatePosition(row : Int, column : Int, c : Char){
-        val position = row * width + column
-        data.getBoard()[position] = c
+
+    private fun pushPiece(position : Int){
+        Log.d("Board", "Clicked: " + position)
+        Log.d("Board", "Column: " + (position % width))
+        val a = data.pushPiece(turnManager.getTurn(), position % width)
+        Log.d("Board", "Clicked: " + a)
+        if(!onBind) notifyItemChanged(a)
+        if(a < length * width) turnManager.nextTurn()
+        if(a < length * width && data.checkWin(a/width, a % width)){
+            data.resetBoard()
+            turnManager.setGameStatus(false)
+            if(!onBind) notifyDataSetChanged()
+        }else if(a < length * width && data.checkTie()){
+            data.resetBoard()
+            turnManager.setGameStatus(false)
+            if(!onBind) notifyDataSetChanged()
+        }
+        Log.d("Board", "Check Win: " + data.checkWin(position/width, position % width))
+        notifyObservers()
     }
 
-    fun updatePosition(position : Int, c : Char){
-        data.getBoard()[position] = c
+    private fun updateBoard(position : Int, piece : View){
+        refreshImages(piece, position)
+        piece.setOnClickListener {
+            pushPiece(position)
+            if(turnManager.isAi()){
+                val random = Random()
+                val newPos = random.nextInt(length * width)
+                pushPiece(newPos)
+            }
+        }
     }
 
     fun addObserver(obs : BoardStateObserver){
@@ -50,6 +76,31 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
 
     fun notifyObservers(){
         for(obs in observers) obs.update()
+    }
+
+    fun undo(){
+        if(!data.isHistoryEmpty()){
+            turnManager.nextTurn()
+            val removed = data.undo()
+            notifyItemChanged(removed.first)
+        }
+    }
+
+    fun getTurn() : Char{
+        return turnManager.getTurn()
+    }
+
+    fun getWinner() : Char{
+        turnManager.nextTurn()
+        return turnManager.getTurn()
+    }
+
+    fun getGameStatus() : Boolean {
+        return turnManager.getGameStatus()
+    }
+
+    fun resetGame() {
+        turnManager.resetGame()
     }
 
     private fun refreshImages(piece : View, position : Int){
@@ -72,30 +123,8 @@ class BoardTileAdapter(private val length : Int, private val width : Int) : Recy
             piece.minimumHeight = piece.width
         }
 
-
         fun bind(position: Int){
-            refreshImages(piece, position)
-            piece.setOnClickListener {
-                val beforePieceChange = data.getBoard()[position]
-                Log.d("Board", "Clicked: " + position)
-                Log.d("Board", "Column: " + (position % width))
-                val a = data.pushPiece(turnManager.getTurn(), position % width)
-                Log.d("Board", "Clicked: " + a)
-                notifyItemChanged(a)
-                if(a < length * width) turnManager.nextTurn()
-                if(a < length * width && data.checkWin(a/width, a % width)){
-                    data.resetBoard()
-                    turnManager.setGameStatus(false)
-                    notifyDataSetChanged()
-                }else if(a < length * width && data.checkTie()){
-                    data.resetBoard()
-                    turnManager.setGameStatus(false)
-                    notifyDataSetChanged()
-                }
-                Log.d("Board", "Check Win: " + data.checkWin(position/width, position % width))
-                notifyObservers()
-            }
-
+            updateBoard(position, piece)
         }
 
     }

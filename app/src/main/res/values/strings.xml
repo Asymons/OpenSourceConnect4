@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Connect4</string>
+    <string name="app_name">Four in a Row Lite</string>
     <string name="colorTransparent">#00FFFFFF</string>
     <string name="colorCurrentTurn">#4CAF50</string>
 </resources>
