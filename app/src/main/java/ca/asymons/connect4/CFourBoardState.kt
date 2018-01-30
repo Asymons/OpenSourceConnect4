@@ -8,6 +8,7 @@ import android.util.Log
 class CFourBoardState(private val length: Int, private val width: Int) : BoardState {
 
     private val state = Array(length * width){'0'}
+    private var moves = 0
 
     override fun updatePiece(pos: Int, p: Char) {
         state[pos] = p
@@ -34,6 +35,7 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
             }
             end -= width
         }
+        ++moves;
         return length * width
     }
 
@@ -42,6 +44,7 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
     override fun checkWin(row : Int, column : Int) : Boolean{
         val p = state[row * width + column]
         Log.d("BoardState", "Character being checked: " + p + " at position " + (row * width + column))
+        if(p == '0') return false
         var win = false
         win = win || checkRowHorizontal(row,column,p)
         Log.d("BoardState", "Horizontal win: " + checkRowHorizontal(row,column,p))
@@ -51,6 +54,12 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
         Log.d("BoardState", "Diagonal win: " + checkRowDiagonal(row,column,p))
 
         return win
+    }
+
+   fun checkWin(pos: Int) : Boolean{
+        val row = pos / width
+        val column = pos % width
+        return checkWin(row,column)
     }
 
     // is this necessary?
@@ -142,6 +151,44 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
         return false
     }
 
+    fun isWinningMove(p: Char, col: Int): Boolean{
+        var end : Int = state.size + col - width
+        while(end >= 0) {
+            if (state[end] == '0') {
+                break
+            }
+            end -= width
+        }
+        return checkWin(end)
+    }
+
+    fun canPlay(column: Int): Boolean{
+        return column in 0..(width - 1) && state[column] == '0'
+    }
+
+    fun getMoves(): Int{
+        return moves
+    }
+
+    fun addAll(other: CFourBoardState){
+        for(i in 0 until other.getBoard().size){
+            state[i] = other.getBoard()[i]
+        }
+    }
+
+    fun testInitialize(){
+        var c = '1'
+        for(i in 10 until state.size/2){
+            state[i] = c
+            c = if(c == '1') '2' else '1'
+        }
+
+        c = '2'
+        for(i in state.size/2 until state.size){
+            state[i] = c
+            c = if(c == '1') '2' else '1'
+        }
+    }
 
 
 

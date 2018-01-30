@@ -12,10 +12,11 @@ import java.util.*
 /**
  * Created by Root on 2017-12-28.
  */
-class BoardTileAdapter(private val length : Int, private val width : Int, private val turnManager: TurnManager) : RecyclerView.Adapter<BoardTileAdapter.ViewHolder>() {
+class BoardTileAdapter(private val length: Int, private val width: Int, private val turnManager: TurnManager) : RecyclerView.Adapter<BoardTileAdapter.ViewHolder>() {
 
-    private val data = CFourBoardBuffer(length,width)
+    private val data: CFourBoardBuffer = CFourBoardBuffer(length,width)
     private val observers = ArrayList<BoardStateObserver>()
+    private val solver = CFourSolver()
     private var onBind : Boolean = false
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
@@ -58,6 +59,9 @@ class BoardTileAdapter(private val length : Int, private val width : Int, privat
         refreshImages(piece, position)
         piece.setOnClickListener {
             pushPiece(position)
+            // log for next option...
+            solver.solve(data, turnManager.getTurn())
+            // this logic needs to be updated
             if(turnManager.isAi()){
                 val random = Random()
                 val newPos = random.nextInt(length * width)
@@ -105,12 +109,15 @@ class BoardTileAdapter(private val length : Int, private val width : Int, privat
 
     private fun refreshImages(piece : View, position : Int){
         Log.d("Board", "Setting Image at: " + position)
-        when {
-            data.getBoard()[position] == '0' -> piece.setBackgroundResource(R.drawable.ic_piece_black)
-            data.getBoard()[position] == '1' -> piece.setBackgroundResource(R.drawable.ic_piece_blue)
-            data.getBoard()[position] == '2' -> piece.setBackgroundResource(R.drawable.ic_piece_red)
+        Log.d("Current Board", data.getBoard().size.toString())
+        if(position < data.getBoard().size){
+            when {
+                data.getBoard()[position] == '0' -> piece.setBackgroundResource(R.drawable.ic_piece_black)
+                data.getBoard()[position] == '1' -> piece.setBackgroundResource(R.drawable.ic_piece_yellow)
+                data.getBoard()[position] == '2' -> piece.setBackgroundResource(R.drawable.ic_piece_red)
+            }
+            piece.minimumHeight = piece.width
         }
-        piece.minimumHeight = piece.width
         Log.d("Board", "Width: " + piece.width + " Height: " + piece.height + " Min Height: " + piece.minimumHeight + " Min Width: " + piece.minimumWidth)
     }
 
@@ -127,6 +134,10 @@ class BoardTileAdapter(private val length : Int, private val width : Int, privat
             updateBoard(position, piece)
         }
 
+    }
+
+    init {
+        data.testInitialize()
     }
 
 }

@@ -40,7 +40,7 @@
                 android:padding="8dp"
                 android:id="@+id/v_ply_one_piece"
                 android:contentDescription="Player 1 Piece"
-                android:src="@drawable/ic_piece_blue"/>
+                android:src="@drawable/ic_piece_yellow"/>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -6,10 +6,29 @@ import java.util.*
 /**
  * Created by Root on 2018-01-03.
  */
-class CFourBoardBuffer(row : Int, col : Int) : BoardBuffer {
+class CFourBoardBuffer : BoardBuffer {
 
-    private val history = Stack<Pair<Int, Char>>()
-    private val data = CFourBoardState(row,col)
+    private var row = 0
+    private var col =  0
+    private var history = Stack<Pair<Int, Char>>()
+    private var data = CFourBoardState(row,col)
+
+    constructor(row : Int, col : Int){
+        this.row = row
+        this.col = col
+        this.data = CFourBoardState(row,col)
+        this.data.testInitialize()
+    }
+
+    constructor(buffer: CFourBoardBuffer){
+        this.row = buffer.row
+        this.col = buffer.col
+        this.history = Stack()
+        this.history.addAll(buffer.history)
+
+        this.data = CFourBoardState(row,col)
+        this.data.addAll(buffer.data)
+    }
 
     override fun pushPiece(p: Char, col: Int): Int {
         val pos = data.pushPiece(p,col)
@@ -42,4 +61,21 @@ class CFourBoardBuffer(row : Int, col : Int) : BoardBuffer {
     override fun isHistoryEmpty() : Boolean{
         return history.isEmpty()
     }
+
+    fun isWinningMove(p: Char, col: Int): Boolean{
+        return data.isWinningMove(p,col)
+    }
+
+    fun canPlay(column: Int): Boolean{
+        return data.canPlay(column)
+    }
+
+    fun getMoves(): Int{
+        return data.getMoves()
+    }
+
+    fun testInitialize() {
+        data.testInitialize()
+    }
+
 }
