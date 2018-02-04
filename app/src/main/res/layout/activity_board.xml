@@ -100,6 +100,13 @@
 
     </RelativeLayout>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Solve"
+        android:id="@+id/btn_solve_game"
+        android:layout_below="@id/board_status_bar"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/board"
         android:layout_width="match_parent"

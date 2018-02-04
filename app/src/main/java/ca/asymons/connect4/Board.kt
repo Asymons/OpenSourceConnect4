@@ -71,6 +71,10 @@ class Board : AppCompatActivity(), BoardStateObserver {
             (board.adapter as BoardTileAdapter).undo()
         }
 
+        btn_solve_game.setOnClickListener {
+            (board.adapter as BoardTileAdapter).solve()
+        }
+
 
 
     }
@@ -91,7 +95,7 @@ class Board : AppCompatActivity(), BoardStateObserver {
     }
 
     private fun startSinglePlayer(){
-        board.adapter = BoardTileAdapter(6,7, OnePlayerCFourTurnManager())
+        board.adapter = BoardTileAdapter(7,6, OnePlayerCFourTurnManager())
         board.layoutManager = GridLayoutManager(applicationContext, 7)
         board.setHasFixedSize(true)
         board.addItemDecoration(BoardAdapterDecorator(0))
@@ -103,7 +107,7 @@ class Board : AppCompatActivity(), BoardStateObserver {
     }
 
     private fun startTwoPlayer(){
-        board.adapter = BoardTileAdapter(6,7, TwoPlayerCFourTurnManager())
+        board.adapter = BoardTileAdapter(7,6, TwoPlayerCFourTurnManager())
         board.layoutManager = GridLayoutManager(applicationContext, 7)
         board.setHasFixedSize(true)
         board.addItemDecoration(BoardAdapterDecorator(0))

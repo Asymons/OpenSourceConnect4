@@ -5,7 +5,7 @@ import android.util.Log
 /**
  * Created by Root on 2017-12-26.
  */
-class CFourBoardState(private val length: Int, private val width: Int) : BoardState {
+class CFourBoardState(private val width: Int, private val length: Int) : BoardState {
 
     private val state = Array(length * width){'0'}
     private var moves = 0
@@ -35,7 +35,36 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
             }
             end -= width
         }
-        ++moves;
+        ++moves
+        return length * width
+    }
+
+    fun modelPushPiece(p : Char, col : Int) : Int {
+        if(col >= width) return length * width
+        if(state[col] != '0') return length * width
+        var end : Int = state.size + col - width
+        while(end >= 0) {
+            if (state[end] == '0') {
+                return end
+            }
+            end -= width
+        }
+        ++moves
+        return length * width
+    }
+
+    fun modelPushPieceAhead(state: Array<Char>, p : Char, col : Int) : Int{
+        if(col >= width) return length * width
+        if(state[col] != '0') return length * width
+        var end : Int = state.size + col - width
+        while(end >= 0) {
+            if (state[end] == '0') {
+                state[end] = p
+                return end
+            }
+            end -= width
+        }
+        ++moves
         return length * width
     }
 
@@ -43,15 +72,15 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
     // 21 checks total per move
     override fun checkWin(row : Int, column : Int) : Boolean{
         val p = state[row * width + column]
-        Log.d("BoardState", "Character being checked: " + p + " at position " + (row * width + column))
+//        Log.d("BoardState", "Character being checked: " + p + " at position " + (row * width + column))
         if(p == '0') return false
         var win = false
         win = win || checkRowHorizontal(row,column,p)
-        Log.d("BoardState", "Horizontal win: " + checkRowHorizontal(row,column,p))
+//        Log.d("BoardState", "Horizontal win: " + checkRowHorizontal(row,column,p))
         win = win || checkRowVertical(row,column,p)
-        Log.d("BoardState", "Vertical win: " + checkRowVertical(row,column,p))
+//        Log.d("BoardState", "Vertical win: " + checkRowVertical(row,column,p))
         win = win || checkRowDiagonal(row,column,p)
-        Log.d("BoardState", "Diagonal win: " + checkRowDiagonal(row,column,p))
+//        Log.d("BoardState", "Diagonal win: " + checkRowDiagonal(row,column,p))
 
         return win
     }
@@ -79,7 +108,7 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
             if(state[(i + a) * width + j + a] == p)
                 connected++
             else connected = 0
-            if(connected == 4) return true
+            if(connected >= 4) return true
         }
         connected = 0
 
@@ -93,7 +122,7 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
                 connected++
             else connected = 0
             if(connected == 4) return true
-            Log.d("BoardState", "Connected State: " + connected + " at pos: " + ((k + a) * width + l - a) + " with char: " + p)
+//            Log.d("BoardState", "Connected State: " + connected + " at pos: " + ((k + a) * width + l - a) + " with char: " + p)
         }
 
         return false
@@ -101,35 +130,38 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
     }
 
     private fun checkRowHorizontal(row : Int, column : Int, p : Char) : Boolean{
-        val col = column - 3
-        if(row >= length || row < 0) {
+        if(row >= width || row < 0 || column >= length || column < 0) {
             return false
         }
+
+        val colPosition = row - 3
+
         var connected = 0
         for(a in 0 .. 6){
-            if(col + a >= width) break
-            if(col + a < 0) continue
-            if(state[row * width + col + a] == p)
+            if(colPosition + a >= width) break
+            if(colPosition + a < 0) continue
+            if(state[row * width + colPosition + a] == p)
                 connected++
             else connected = 0
-            if(connected == 4) return true
+            if(connected >= 4) return true
         }
         return false
     }
 
 
     private fun checkRowVertical(row : Int, column : Int, p : Char) : Boolean{
-        if(column >= width || column < 0) {
+        if(row >= width || row < 0 || column >= length || column < 0) {
             return false
         }
+
         var connected = 0
         for(a in 0 .. 3){
             if(row + a >= length) break
-            if(row + a < 0) continue
+            if(row + a < 0) break
             if(state[(row + a) * width + column] == p)
                 connected++
             else connected = 0
-            if(connected == 4) return true
+            if(connected >= 4) return true
         }
         return false
     }
@@ -152,14 +184,11 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
     }
 
     fun isWinningMove(p: Char, col: Int): Boolean{
-        var end : Int = state.size + col - width
-        while(end >= 0) {
-            if (state[end] == '0') {
-                break
-            }
-            end -= width
-        }
-        return checkWin(end)
+        val end : Int = pushPiece(p, col)
+//        Log.d("Winning Move Check", "End is $end")
+        val result = checkWin(end)
+        state[end] = '0'
+        return result
     }
 
     fun canPlay(column: Int): Boolean{
@@ -178,10 +207,10 @@ class CFourBoardState(private val length: Int, private val width: Int) : BoardSt
 
     fun testInitialize(){
         var c = '1'
-        for(i in 10 until state.size/2){
-            state[i] = c
-            c = if(c == '1') '2' else '1'
-        }
+//        for(i in 10 until state.size/2){
+//            state[i] = c
+//            c = if(c == '1') '2' else '1'
+//        }
 
         c = '2'
         for(i in state.size/2 until state.size){

@@ -1,5 +1,6 @@
 package ca.asymons.connect4
 
+import android.util.Log
 import java.util.*
 
 
@@ -76,6 +77,15 @@ class CFourBoardBuffer : BoardBuffer {
 
     fun testInitialize() {
         data.testInitialize()
+    }
+
+    override fun toString(): String{
+        val stringBuffer = StringBuffer()
+        for(i in 0 until data.getBoard().size){
+            if(i % row == 0) stringBuffer.append('\n')
+            stringBuffer.append(data.getBoard()[i])
+        }
+        return stringBuffer.toString()
     }
 
 }

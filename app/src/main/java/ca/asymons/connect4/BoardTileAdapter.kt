@@ -12,9 +12,9 @@ import java.util.*
 /**
  * Created by Root on 2017-12-28.
  */
-class BoardTileAdapter(private val length: Int, private val width: Int, private val turnManager: TurnManager) : RecyclerView.Adapter<BoardTileAdapter.ViewHolder>() {
+class BoardTileAdapter(private val row: Int, private val col: Int, private val turnManager: TurnManager) : RecyclerView.Adapter<BoardTileAdapter.ViewHolder>() {
 
-    private val data: CFourBoardBuffer = CFourBoardBuffer(length,width)
+    private val data: CFourBoardBuffer = CFourBoardBuffer(row, col)
     private val observers = ArrayList<BoardStateObserver>()
     private val solver = CFourSolver()
     private var onBind : Boolean = false
@@ -31,27 +31,31 @@ class BoardTileAdapter(private val length: Int, private val width: Int, private 
     }
 
     override fun getItemCount(): Int {
-        return length * width
+        return row * col
+    }
+
+    fun solve() {
+        solver.solve(data, turnManager.getTurn());
     }
 
 
     private fun pushPiece(position : Int){
-        Log.d("Board", "Clicked: " + position)
-        Log.d("Board", "Column: " + (position % width))
-        val a = data.pushPiece(turnManager.getTurn(), position % width)
-        Log.d("Board", "Clicked: " + a)
+//        Log.d("Board", "Clicked: " + position)
+//        Log.d("Board", "Column: " + (position % row))
+        val a = data.pushPiece(turnManager.getTurn(), position % row)
+//        Log.d("Board", "Clicked: " + row)
         if(!onBind) notifyItemChanged(a)
-        if(a < length * width) turnManager.nextTurn()
-        if(a < length * width && data.checkWin(a/width, a % width)){
+        if(a < row * col) turnManager.nextTurn()
+        if(a < row * col && data.checkWin(a / row, a % row)){
             data.resetBoard()
             turnManager.setGameStatus(false)
             if(!onBind) notifyDataSetChanged()
-        }else if(a < length * width && data.checkTie()){
+        }else if(a < row * col && data.checkTie()){
             data.resetBoard()
             turnManager.setGameStatus(false)
             if(!onBind) notifyDataSetChanged()
         }
-        Log.d("Board", "Check Win: " + data.checkWin(position/width, position % width))
+//        Log.d("Board", "Check Win: " + data.checkWin(position / row, position % row))
         notifyObservers()
     }
 
@@ -60,11 +64,11 @@ class BoardTileAdapter(private val length: Int, private val width: Int, private 
         piece.setOnClickListener {
             pushPiece(position)
             // log for next option...
-            solver.solve(data, turnManager.getTurn())
+//            solver.solve(data, turnManager.getTurn())
             // this logic needs to be updated
             if(turnManager.isAi()){
                 val random = Random()
-                val newPos = random.nextInt(length * width)
+                val newPos = random.nextInt(row * col)
                 pushPiece(newPos)
             }
         }
@@ -108,8 +112,8 @@ class BoardTileAdapter(private val length: Int, private val width: Int, private 
     }
 
     private fun refreshImages(piece : View, position : Int){
-        Log.d("Board", "Setting Image at: " + position)
-        Log.d("Current Board", data.getBoard().size.toString())
+//        Log.d("Board", "Setting Image at: " + position)
+//        Log.d("Current Board", data.getBoard().size.toString())
         if(position < data.getBoard().size){
             when {
                 data.getBoard()[position] == '0' -> piece.setBackgroundResource(R.drawable.ic_piece_black)
@@ -118,7 +122,7 @@ class BoardTileAdapter(private val length: Int, private val width: Int, private 
             }
             piece.minimumHeight = piece.width
         }
-        Log.d("Board", "Width: " + piece.width + " Height: " + piece.height + " Min Height: " + piece.minimumHeight + " Min Width: " + piece.minimumWidth)
+//        Log.d("Board", "Width: " + piece.width + " Height: " + piece.height + " Min Height: " + piece.minimumHeight + " Min Width: " + piece.minimumWidth)
     }
 
     inner class ViewHolder(v : View) : RecyclerView.ViewHolder(v) {

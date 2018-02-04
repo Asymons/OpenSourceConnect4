@@ -8,51 +8,63 @@ import android.util.Log
 class CFourSolver {
     private val WIDTH = 7
     private val HEIGHT = 6
+    private val columnOrder = Array(WIDTH){0}
     var nodeCount = 0
     var bestColumn = 0
 
-    private fun negamax(state: CFourBoardBuffer, p: Char): Int{
+    private fun negamax(state: CFourBoardBuffer, p: Char, alpha: Int, beta: Int): Int{
         nodeCount++
-        if(state.checkTie()) return 0
-        Log.d("Negamax", "past tie")
-        for(i in 0..WIDTH){
-            if(state.canPlay(i) && state.isWinningMove(p,i))
-                return (WIDTH*HEIGHT+1 - state.getMoves())/2
+        var mAlpha = alpha
+        if(nodeCount > 5000000) {
+            Log.d("negamax", "Node count reached")
+            return 0
         }
-        Log.d("Negamax", "past win")
+        if(state.checkTie()) {
+            Log.d("Negamax", "End State in Tie: \n" + state.toString())
+            return 0
+        }
 
-
-        var bestScore = -WIDTH*HEIGHT
-
-        Log.d("Negamax", "can play: " + state.canPlay(0))
-
-        for(i in 0..WIDTH){
-            if(state.canPlay(i)){
-                val state2 = CFourBoardBuffer(state)
-                val pos = state2.pushPiece(p, i)
-                Log.d("Negamax", "New State: " + state2.getBoard()[pos])
-                Log.d("Negamax", "Old State: " + state.getBoard()[pos])
-
-                val score = -negamax(state2, if(p=='1') '2' else '1')
-                if(score > bestScore){
-                    bestScore = score
-                    bestColumn = i
-                    Log.d("Best Column: ", bestColumn.toString())
-                }
+        for(i in 0 until WIDTH){
+            if(state.canPlay(i) && state.isWinningMove(p,i)){
+                Log.d("Negamax", "End State in Win: \n" + state.toString())
+                bestColumn = i
+                return (WIDTH*HEIGHT+1 - state.getMoves())/2
             }
         }
 
-        Log.d("Negamax", "returning best score")
-        Log.d("Negamax", "best score: " + bestScore)
+        var max = (WIDTH*HEIGHT-1 - state.getMoves())/2
+        if(beta > max && alpha >= max){
+            if(alpha >= max) return max
+        }
 
-        return bestScore
+        for(i in 0 until WIDTH){
+            if(state.canPlay(columnOrder[i])){
+                val state2 = CFourBoardBuffer(state)
+                state2.pushPiece(p, columnOrder[i])
+
+                val score = -negamax(state2, if(p=='1') '2' else '1', -beta, -alpha)
+                if(score >= beta) return score
+                if(score > alpha) mAlpha = score
+            }
+        }
+
+        return mAlpha
     }
 
-    fun solve(state: CFourBoardBuffer, p: Char): Int{
+    fun solve(state: CFourBoardBuffer, p: Char, weak: Boolean = true): Int{
         nodeCount = 0
         bestColumn = 0
-        val negamaxVal = negamax(state, p)
+        for (i in 0 until WIDTH){
+            columnOrder[i] = WIDTH/2 + (1-2*(i%2))*(i+1)/2
+        }
+
+        val negamaxVal = if(weak){
+            negamax(state,p,-1,1)
+        }else{
+            negamax(state,p,-WIDTH*HEIGHT/2,WIDTH*HEIGHT/2)
+        }
         Log.d("Negamax", "Final Value: " + negamaxVal)
+        Log.d("best column", bestColumn.toString())
         return negamaxVal
     }
 
