@@ -7,7 +7,8 @@ class OnePlayerCFourTurnManager : TurnManager {
 
     private val pieceA = '1'
     private val pieceB = '2'
-    private var actionPiece = if(Math.random() > 0.5) pieceA else pieceB
+    // for now, let first player always start
+    private var actionPiece = pieceA
     private var gameStatus = true
 
     override fun nextTurn() {
@@ -16,7 +17,7 @@ class OnePlayerCFourTurnManager : TurnManager {
 
     override fun resetGame(){
         if(!gameStatus){
-            actionPiece = if(Math.random() > 0.5) pieceA else pieceB
+            actionPiece = pieceA
             gameStatus = true
         }
     }

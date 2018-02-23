@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "504103839812",
+    "firebase_url": "https://four-in-a-row-lite.firebaseio.com",
+    "project_id": "four-in-a-row-lite",
+    "storage_bucket": "four-in-a-row-lite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504103839812:android:5cd962a4bca7c1ba",
+        "android_client_info": {
+          "package_name": "ca.asymons.connect4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504103839812-f78sbepkdsiq86u22saa8fk7qjfl1o5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp6STe64Iyg7RkRKL1BBuPCeuTj6I4YI0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

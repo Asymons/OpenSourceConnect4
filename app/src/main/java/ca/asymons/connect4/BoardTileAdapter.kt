@@ -1,7 +1,6 @@
 package ca.asymons.connect4
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,10 +39,7 @@ class BoardTileAdapter(private val row: Int, private val col: Int, private val t
 
 
     private fun pushPiece(position : Int){
-//        Log.d("Board", "Clicked: " + position)
-//        Log.d("Board", "Column: " + (position % row))
         val a = data.pushPiece(turnManager.getTurn(), position % row)
-//        Log.d("Board", "Clicked: " + row)
         if(!onBind) notifyItemChanged(a)
         if(a < row * col) turnManager.nextTurn()
         if(a < row * col && data.checkWin(a / row, a % row)){
@@ -55,7 +51,6 @@ class BoardTileAdapter(private val row: Int, private val col: Int, private val t
             turnManager.setGameStatus(false)
             if(!onBind) notifyDataSetChanged()
         }
-//        Log.d("Board", "Check Win: " + data.checkWin(position / row, position % row))
         notifyObservers()
     }
 
@@ -65,11 +60,8 @@ class BoardTileAdapter(private val row: Int, private val col: Int, private val t
             pushPiece(position)
             // log for next option...
 //            solver.solve(data, turnManager.getTurn())
-            // this logic needs to be updated
             if(turnManager.isAi()){
-                val random = Random()
-                val newPos = random.nextInt(row * col)
-                pushPiece(newPos)
+                pushPiece(solver.solve(data, turnManager.getTurn()))
             }
         }
     }
@@ -112,8 +104,6 @@ class BoardTileAdapter(private val row: Int, private val col: Int, private val t
     }
 
     private fun refreshImages(piece : View, position : Int){
-//        Log.d("Board", "Setting Image at: " + position)
-//        Log.d("Current Board", data.getBoard().size.toString())
         if(position < data.getBoard().size){
             when {
                 data.getBoard()[position] == '0' -> piece.setBackgroundResource(R.drawable.ic_piece_black)
@@ -122,7 +112,6 @@ class BoardTileAdapter(private val row: Int, private val col: Int, private val t
             }
             piece.minimumHeight = piece.width
         }
-//        Log.d("Board", "Width: " + piece.width + " Height: " + piece.height + " Min Height: " + piece.minimumHeight + " Min Width: " + piece.minimumWidth)
     }
 
     inner class ViewHolder(v : View) : RecyclerView.ViewHolder(v) {

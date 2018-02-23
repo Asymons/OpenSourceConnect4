@@ -98,7 +98,7 @@ class Board : AppCompatActivity(), BoardStateObserver {
         board.adapter = BoardTileAdapter(7,6, OnePlayerCFourTurnManager())
         board.layoutManager = GridLayoutManager(applicationContext, 7)
         board.setHasFixedSize(true)
-        board.addItemDecoration(BoardAdapterDecorator(0))
+        board.addItemDecoration(BoardAdapterDecorator())
 
         (board.adapter as BoardTileAdapter).addObserver(this)
         updateTurn()
@@ -110,7 +110,7 @@ class Board : AppCompatActivity(), BoardStateObserver {
         board.adapter = BoardTileAdapter(7,6, TwoPlayerCFourTurnManager())
         board.layoutManager = GridLayoutManager(applicationContext, 7)
         board.setHasFixedSize(true)
-        board.addItemDecoration(BoardAdapterDecorator(0))
+        board.addItemDecoration(BoardAdapterDecorator())
 
         (board.adapter as BoardTileAdapter).addObserver(this)
         updateTurn()
