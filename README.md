@@ -9,5 +9,5 @@ Goals:
 
 Current:
 * Game is light weight, used as little bloat as possible. You can play local multiplayer or single player with ease!
-* Perfect AI is somewhat imperfect, as the game progresses the AI responds faster and smarter (because less moves to computer). I still need to implement a hashmap to save common moves or limit depth of move computation early. Alpha beta pruning was successfully implemented despite this and column priority was added.
+* Perfect AI is somewhat imperfect, as the game progresses the AI responds faster and smarter (because less moves to compute). I still need to implement a hashmap to save common moves or limit depth of move computation early. Alpha beta pruning was successfully implemented despite this and column priority was added.
 * No online play :( 
